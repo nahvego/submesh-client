@@ -1,0 +1,92 @@
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+body {
+	padding-top: 50px;
+}
+
+.row.row-grid [class*="col-"] + [class*="col-"] {
+	margin-top: 15px;
+}
+
+@media (min-width: 1200px) {
+	.row.row-grid [class*="col-lg-"] + [class*="col-lg-"] {
+		margin-top: 0;
+	}
+}
+@media (min-width: 992px) {
+	.row.row-grid [class*="col-md-"] + [class*="col-md-"] {
+		margin-top: 0;
+	}
+}
+@media (min-width: 768px) {
+	.row.row-grid [class*="col-sm-"] + [class*="col-sm-"] {
+		margin-top: 0;
+	}
+}
+
+.list-separated li:not(:last-child):after {
+	content:'|';
+	margin-left: $list-inline-padding;
+}
+
+a[target="_blank"]:not(.blank-opt-out):after {
+	content: '\e064';
+	font-family: Icons;
+	font-size: 80%;
+	margin-left: $spacer*.25;
+	line-height: 1;
+	top: 1px;
+	position: relative;
+}
+
+.sm-post-list img {
+	width: 65px;
+	height: 65px;
+}
+
+.sm-votes {
+	width: 12%;
+}
+
+@include media-breakpoint-up(md) {
+	.sm-votes {
+		width: 8%;
+	}
+}
+
+.sm-votes a {
+	cursor: pointer;
+}
+
+.sm-post-link {
+	color: $body-color;
+	font-size: 120%;
+
+	&#{&}:hover, &#{&}:active {
+		color: lighten($body-color, 20%) !important;
+		text-decoration: none;
+	}
+
+	&:visited, &:focus {
+		color: lighten($body-color, 45%) !important;
+	}
+}
+
+.sm-post-more {
+	font-size: 80%;
+	
+	a {
+		&, &:hover, &:active, &:visited {
+			color: inherit;
+		}
+	}
+
+	span {
+		cursor: default;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
