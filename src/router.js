@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import PostList from './views/PostList.vue'
+import Profile from './views/Profile.vue'
 import SidebarHome from './views/SidebarHome.vue'
 import SidebarSub from './views/SidebarSub.vue'
 import NotFound from './views/NotFound.vue'
@@ -26,6 +27,14 @@ export default new Router({
 			components: {
 				default: PostList,
 				sidebar: SidebarSub
+			}
+		},
+		{
+			path: '/u/:user',
+			name: 'profile',
+			components: {
+				default: Profile,
+				sidebar: SidebarHome
 			}
 		},
 		{

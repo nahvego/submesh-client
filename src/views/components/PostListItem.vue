@@ -1,9 +1,9 @@
 <template>
 	<li class="list-group-item sm-post-list d-flex flex-row py-0 pl-0">
-		<div class="sm-votes bg-light mr-3 align-middle flex-column d-flex text-center justify-content-center">
-			<a class="oi oi-thumb-up text-secondary" aria-hidden="true"></a>
+		<div class="sm-votes mr-3 align-middle flex-column d-flex text-center justify-content-center">
+			<a class="fas fa-thumbs-up text-secondary"></a>
 			<span class="my-2 font-weight-bold small" data-placement="right" data-toggle="tooltip" title="999.123">999k</span>
-			<a class="oi oi-thumb-down text-secondary" aria-hidden="true"></a>
+			<a class="fas fa-thumbs-down text-secondary"></a>
 		</div>
 		<div class="media py-2">
 			<a href="/EXTERNAL LINK" target="_blank" class="blank-opt-out">
@@ -14,7 +14,7 @@
 				<a href="#out" class="sm-post-more" target="_blank">link al enlace si es un enlace</a>
 				<div class="sm-post-more"><a href="#"><b>s/tigres</b></a> Publicado por <a href="#">u/juanito</a> <span title="02/02/02 02:02 (GMT)" data-toggle="tooltip" data-placement="top">hace 2 horas</span></div>
 				<ul class="list-inline small text-muted list-separated mt-1">
-					<li class="list-inline-item"><a href="comments" class="text-muted"><span class="oi oi-comment-square small mr-1"></span>6 comentarios</a></li>
+					<li class="list-inline-item"><a href="comments" class="text-muted"><i class="fas fa-comment-alt small mr-1"></i>6 comentarios</a></li>
 					<li class="list-inline-item">95% upvotes</li>
 					<li class="list-inline-item">{{ post }}</li>
 				</ul>

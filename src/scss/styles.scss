@@ -1,6 +1,4 @@
-@import "../../node_modules/bootstrap/scss/functions";
-@import "../../node_modules/bootstrap/scss/variables";
-@import "../../node_modules/bootstrap/scss/mixins";
+@import "./imports.scss";
 
 body {
 	padding-top: 50px;
@@ -32,12 +30,11 @@ body {
 }
 
 a[target="_blank"]:not(.blank-opt-out):after {
-	content: '\e064';
-	font-family: Icons;
+	content: '\f35d';
+	font-family: FAwesome;
 	font-size: 80%;
 	margin-left: $spacer*.25;
 	line-height: 1;
-	top: 1px;
 	position: relative;
 }
 
@@ -48,6 +45,7 @@ a[target="_blank"]:not(.blank-opt-out):after {
 
 .sm-votes {
 	width: 12%;
+	background-color: darken($light, 5%)
 }
 
 @include media-breakpoint-up(md) {
@@ -56,7 +54,7 @@ a[target="_blank"]:not(.blank-opt-out):after {
 	}
 }
 
-.sm-votes a {
+a {
 	cursor: pointer;
 }
 
@@ -89,4 +87,52 @@ a[target="_blank"]:not(.blank-opt-out):after {
 			text-decoration: underline;
 		}
 	}
+}
+
+// TODO: Cómo mierda poner esto en los componentes
+/* NAVBAR */
+
+.bg-wave {
+	background-color: darken($light, 8%);
+	border-color: $gray-500;
+}
+
+#navbar-m {
+	.dropdown-item:not(.active):hover {
+		background-color: darken($light, 10%);
+	}
+}
+
+
+// TODO: Solucionar esta basura
+@font-face {
+	font-family: FAwesome;
+	font-style:normal;
+	font-weight:900;
+	src:url(./assets/fa-solid-900.eot);
+	src:url(./assets/fa-solid-900.eot?#iefix) format("embedded-opentype"),url(./assets/fa-solid-900.woff2) format("woff2"),url(./assets/fa-solid-900.woff) format("woff"),url(./assets/fa-solid-900.ttf) format("truetype"),url(./assets/fa-solid-900.svg#fontawesome) format("svg")
+}
+
+@keyframes spin {
+	0% {
+	 transform:rotate(0deg)
+	}
+	to {
+	 transform:rotate(1turn)
+	}
+   }
+
+.loading-ready:not(.loading-after)[disabled]:before, .loading-ready-after[disabled]:after {
+	font-family: FAwesome;
+	content: '\f110';
+	font-size: 90%;
+	margin-right: $spacer*.25;
+	line-height: 1;
+	display: inline-block;
+	position: relative;
+	animation: spin 2s infinite linear;
+}
+
+.loading-ready-after[disabled]:after {
+	margin: 0 0 $spacer*.25 0; 
 }

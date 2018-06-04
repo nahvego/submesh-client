@@ -61,7 +61,7 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
+        test: /\.(png|jpg|gif|svg|ttf|eot|woff2|woff|svg)$/,
         loader: 'file-loader',
         options: {
           name: '[name].[ext]?[hash]'
@@ -71,7 +71,9 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+	  'vue$': 'vue/dist/vue.esm.js',
+	  'bootstrap': path.resolve(__dirname, 'node_modules/bootstrap/scss/'),
+	  'imports': path.resolve(__dirname, './src/scss/imports.scss')
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
