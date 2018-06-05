@@ -50,31 +50,10 @@ const vm = new Vue({
 						id: response.data.userID,
 						subscriptions: response.data.subscriptions
 					}
-					self.$store.commit('login', userObj);
 					localStorage.setItem('user', JSON.stringify(userObj));
 					localStorage.setItem('sess', response.data.token);
 					localStorage.setItem('refresh', response.data.refresh);
-
-					self.axios.defaults.headers['Authorization'] = "Bearer " + response.data.token;
-
-					self.$data.interceptor = axios.interceptors.response.use(r => r, function(error) {
-						if(error.response.status === 401) {
-							self.axios.post('/login', {
-								refresh: localStorage.getItem('refresh')
-							}).then(function(response) {
-								localStorage.setItem('sess', response.data.token);
-								localStorage.setItem('refresh', response.data.refresh);
-								self.axios.defaults.headers['Authorization'] = error.config.headers['Authorization'] = "Bearer " + response.data.token;
-
-								return self.axios(error.config);
-							}).catch(function(err) {
-								// Es necesario desloguear al usuario
-								self.logout(true);
-							})
-						} else {
-							return Promise.reject(error);
-						}
-					})
+					self._completeLogin(userObj);
 
 					res();
 				}).catch(function(error) {
@@ -88,6 +67,7 @@ const vm = new Vue({
 		logout: function(force) {
 			this.$store.commit('logout');
 			delete this.axios.defaults.headers['Authorization'];
+			this.axios.interceptors.request.eject(this.$data.interceptor);
 			localStorage.removeItem('user');
 			localStorage.removeItem('sess');
 			localStorage.removeItem('refresh');
@@ -106,21 +86,52 @@ const vm = new Vue({
 				// Cogemos titulo cuerpo y botones?
 			}
 			$('#modal-alert').modal();
+		},
+
+		_completeLogin: function(userObj, token) {
+			let self = this;
+			token = token || localStorage.getItem('sess');
+			self.$store.commit('login', userObj);
+
+			self.axios.defaults.headers['Authorization'] = "Bearer " + token;
+			
+			self.$data.interceptor = self.axios.interceptors.response.use(r => r, function(error) {
+				console.log("AXIOS INTERCEPTOR!!!!", error.response.status);
+				if(error.response.status === 401) {
+					self.axios.post('/login', {
+						refresh: localStorage.getItem('refresh')
+					}).then(function(response) {
+						localStorage.setItem('sess', response.data.token);
+						localStorage.setItem('refresh', response.data.refresh);
+						self.axios.defaults.headers['Authorization'] = error.config.headers['Authorization'] = "Bearer " + response.data.token;
+
+						return self.axios(error.config);
+					}).catch(function(err) {
+						// Es necesario desloguear al usuario
+						self.logout(true);
+					})
+				} else {
+					return Promise.reject(error);
+				}
+			})
 		}
 	},
 	created: function() {
 		let axiosInstance = axios.create({
-			baseURL: 'http://localhost:8000/api/v1',
-			headers: {
-				'Content-Type': 'application/json'
-			}
+			baseURL: 'http://localhost:8000/api/v1'
 		});
+		axiosInstance.defaults.headers['Content-Type'] = "application/json";
+		axiosInstance.interceptors.request.use(function(config) {
+			if(config.data === undefined)
+				config.data = {};
+			return config;
+		}, Promise.reject)
 		Vue.use(VueAxios, axiosInstance);
+		
 
 		let u = localStorage.getItem('user');
 		if(null !== u) {
-			this.$store.commit('login', JSON.parse(u));
-			axiosInstance.defaults.headers['Authorization'] = "Bearer " + localStorage.getItem('sess');
+			this._completeLogin(JSON.parse(u));
 		}
 	}
 }).$mount("#app");

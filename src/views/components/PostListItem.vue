@@ -11,14 +11,14 @@
 			</a>
 			<div class="media-body ml-3">
 				<h6 class="mb-0">
-					<router-link class="font-weight-bold sm-post-link" :to="{name:'post', params: {sub: post.subUrlname, post: post.id, title: post.title | urlify}}">{{ post.title }} </router-link>
+					<router-link class="font-weight-bold sm-post-link" :to="{name:'post', params: {sub: post.subUrlname, post: post.id, title: post.title}}">{{ post.title }} </router-link>
 				</h6>
-				<router-link class="sm-post-more" target="_blank" :to="post.link">{{ post.link }}</router-link>
+				<a class="sm-post-more" target="_blank" :to="post.link" v-if="post.link">{{ post.link }}</a>
 				<div class="sm-post-more">
-					<router-link :to="{name:'sub', params: {sub: post.subUrlname }}"><b>{{ post.subUrlname }}</b></router-link> Publicado por <router-link :to="{name:'profile', params: {user: post.authorName }}">{{ post.authorName }}</router-link> <span :title="post.creationTime | formatDate" data-toggle="tooltip" data-placement="top">{{ post.creationTime | formatDateShort }}</span>
+					<router-link :to="{name:'sub', params: {sub: post.subUrlname }}"><b>/s/{{ post.subUrlname }}</b></router-link> Publicado por <router-link v-if="post.authorName" :to="{name:'profile', params: {user: post.authorName }}">{{ post.authorName }}</router-link><i v-else>[eliminado]</i> <span :title="post.creationDate | formatDate" data-toggle="tooltip" data-placement="top">{{ post.creationDate | formatDateShort }}</span>
 				</div>
 				<ul class="list-inline small text-muted list-separated mt-1">
-					<li class="list-inline-item"><router-link :to="{hash: 'comments', name:'post', params: {sub: post.subUrlname, post: post.id, title: post.title | urlify}}" class="text-muted"><i class="fas fa-comment-alt small mr-1"></i>{{ post.commentCount }} comentarios</router-link></li>
+					<li class="list-inline-item"><router-link :to="{hash: 'comments', name:'post', params: {sub: post.subUrlname, post: post.id, title: post.title}}" class="text-muted"><i class="fas fa-comment-alt small mr-1"></i>{{ post.commentCount }} comentarios</router-link></li>
 					<li class="list-inline-item">{{ post.upvotePercentage }}% upvotes</li>
 					<li class="list-inline-item"> ??? </li>
 				</ul>

@@ -1,9 +1,10 @@
 <template>
 	<div class="card">
 		<div class="card-header"><h4 class="mb-0">{{ sub }}</h4></div>
-		<ul class="list-group list-group-flush">
+		<ul class="list-group list-group-flush" v-if="posts.length > 0">
 			<post-list-item v-for="post in posts" :post="post" :key="post.id"></post-list-item>
 		</ul>
+		<div v-else class="alert alert-warning m-3" role="alert">No hay posts que mostrar</div>
 	</div>
 </template>
 
@@ -19,7 +20,7 @@ export default {
 	},
 	data: function() {
 		return {
-			posts: [{id:1,"title":"TITULO PLACEHOLDER"}]
+			posts: []
 		}
 	},
 	watch: {
@@ -38,7 +39,7 @@ export default {
 				this.sub = 'Tu homepage'
 				// Personal personalizada
 				requestRoute = '/subs/me/posts';
-			} else if(this.$route.params === "all" || this.$route.params === undefined) {
+			} else if(this.$route.params === "all" || this.$route.params.sub === undefined) {
 				this.sub = '/s/all';
 				// s/all
 				requestRoute = '/subs/all/posts';
@@ -47,10 +48,13 @@ export default {
 				//sub cocreto
 				requestRoute = '/subs/' + this.$route.params.sub + '/posts';
 			}
+			let self = this;
 			this.$root.axios.get(requestRoute).then(function(response) {
-
+				self.posts = response.data;
+				console.log(self.posts[0].creationDate);
 			}).catch(function(error) {
 				// TODO: Catch errors.
+				console.log(error);
 			});
 		},
 		log() {
