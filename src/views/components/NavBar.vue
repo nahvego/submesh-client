@@ -12,8 +12,8 @@
 				<li class="nav-item">
 					<router-link class="nav-link" to="/s/all">/s/all</router-link>
 				</li>
-				<li class="nav-item dropdown" v-if="isLogged">
-					<a id="navbarSuscriptions" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mis suscripciones</a>
+				<li class="nav-item dropdown" v-if="isLogged && user.subscriptions.length">
+					<a id="navbarSuscriptions" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mis suscripciones</a>
 					<div class="dropdown-menu" aria-labelledby="navbarSuscriptions">
 						<!-- :key="sub.id" en el v-for-->
 						<router-link :key="sub" v-for="sub in user.subscriptions" class="dropdown-item" :to="{name: 'sub', params: {sub}}">/s/{{sub}}</router-link>
@@ -22,7 +22,7 @@
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item dropdown" v-if="isLogged">
-					<a id="navbarProfile" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.name}}</a>
+					<a id="navbarProfile" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.name}}</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarProfile">
 						<router-link class="dropdown-item" :to="{ name: 'profile', params: {user: user.name}}">Mi perfil</router-link>
 						<a class="dropdown-item" :click="logout">Salir</a>

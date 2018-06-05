@@ -14,16 +14,17 @@ export default new Router({
 	linkActiveClass: 'active-partial',
 	routes: [
 		{
-			path: '/',
-			name: 'home',
+			path: '/s/:sub?',
+			alias: '/',
+			name: 'sub',
 			components: {
 				default: PostList,
-				sidebar: SidebarHome
+				sidebar: SidebarSub
 			}
 		},
 		{
-			path: '/s/:sub',
-			name: 'sub',
+			path: '/s/:sub/:post/:title?',
+			name: 'post',
 			components: {
 				default: PostList,
 				sidebar: SidebarSub

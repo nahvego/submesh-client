@@ -1,5 +1,5 @@
 <template>
-	<div id="modal-login" class="modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modalLogin">
+	<div id="modal-alert" class="modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modalLogin">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<form role="form" action="#" v-on:submit="doLogin($event)">
@@ -31,20 +31,6 @@
 import { mapGetters, mapState } from 'vuex';
 
 export default {
-  	name: 'login-modal',
-	methods: {
-		doLogin: function(e) {
-			e.preventDefault();
-			$('#login').prop('disabled', true);
-			this.$root.login($('#username').val(), $('#password').val()).then(function(a) {
-				$('#modal-login').modal('hide');
-			})
-			.catch(function(e) {
-				$('#modal-login .alert').text(e).removeClass('d-none');
-			}).then(function() {
-				$('#login').prop('disabled', false);
-			})
-		}
-	}
+  	name: 'alert-modal'
 }
 </script>

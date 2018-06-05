@@ -1,6 +1,6 @@
 <template>
 	<div class="card">
-		<div class="card-header"><h4 class="mb-0">/s/sub<span v-if="isLogged">Test</span><a v-on:click="log()">LOGin!</a></h4></div>
+		<div class="card-header"><h4 class="mb-0">{{ sub }}</h4></div>
 		<ul class="list-group list-group-flush">
 			<post-list-item v-for="post in posts" :post="post" :key="post.id"></post-list-item>
 		</ul>
@@ -32,8 +32,26 @@ export default {
 	},
 	methods: {
 		load() {
-			console.log(">>>", this.$options.components)
-			this.posts = [{id:2,"title":"PLACEHOLDER 2"},{id:3,"title":"PLACEHOLDER 3"}];
+			// Es necesario devolver subUrlname!
+			let requestRoute;
+			if(this.$route.params === undefined && this.isLogged && this.user.subscriptions.length > 0) {
+				this.sub = 'Tu homepage'
+				// Personal personalizada
+				requestRoute = '/subs/me/posts';
+			} else if(this.$route.params === "all" || this.$route.params === undefined) {
+				this.sub = '/s/all';
+				// s/all
+				requestRoute = '/subs/all/posts';
+			} else {
+				this.sub = '/s/' + this.$route.params.sub;
+				//sub cocreto
+				requestRoute = '/subs/' + this.$route.params.sub + '/posts';
+			}
+			this.$root.axios.get(requestRoute).then(function(response) {
+
+			}).catch(function(error) {
+				// TODO: Catch errors.
+			});
 		},
 		log() {
 			console.log('LOGGING IN');
