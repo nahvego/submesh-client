@@ -33,7 +33,7 @@
 						<a class="nav-link" v-on:click="openLoginModal()">Login</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" :click="openRegisterModal">Registro</a>
+						<a class="nav-link" v-on:click="openRegisterModal()">Registro</a>
 					</li>
 				</template>
 			</ul>
@@ -59,7 +59,7 @@ export default {
 			$('#modal-login').modal();
 		},
 		openRegisterModal: function() {
-			
+			$('#modal-register').modal();
 		},
 		logout: function() {
 

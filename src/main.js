@@ -9,6 +9,9 @@ import store from './store.js'
 import navbar from './views/components/NavBar.vue';
 import AlertModal from './views/components/AlertModal.vue';
 import LoginModal from './views/components/LoginModal.vue';
+import RegisterModal from './views/components/RegisterModal.vue';
+
+
 
 import UrlifyPcge from 'urlify';
 const urlify = UrlifyPcge.create({
@@ -20,13 +23,15 @@ const urlify = UrlifyPcge.create({
 
 Vue.component('navbar', navbar);
 Vue.component('app', App);
+Vue.component('register-modal', RegisterModal);
 Vue.component('login-modal', LoginModal);
 Vue.component('alert-modal', AlertModal);
 
 Vue.filter('formatNumber', function(n) {
-	return new Intl.NumberFormat().format(n);
+	return new Intl.NumberFormat().format(n || 0);
 });
 Vue.filter('formatNumberShort', function(n) {
+	n = n || 0;
 	let str;
 	if(n >= 1e6) {
 		let div = n/1e6;
@@ -138,8 +143,11 @@ const vm = new Vue({
 
 			self.axios.defaults.headers['Authorization'] = "Bearer " + token;
 			
-			self.$data.interceptor = self.axios.interceptors.response.use(r => r, function(error) {
-				console.log("AXIOS INTERCEPTOR!!!!", error.response.status);
+			self.$data.interceptor = self.axios.interceptors.response.use(function(r) {
+				//console.log("Axios interceptor (gut)", r);
+				return r;
+			}, function(error) {
+				//console.log("AXIOS INTERCEPTOR!!!!", error.response.status);
 				if(error.response.status === 401) {
 					self.axios.post('/login', {
 						refresh: localStorage.getItem('refresh')
@@ -148,7 +156,7 @@ const vm = new Vue({
 						localStorage.setItem('refresh', response.data.refresh);
 						self.axios.defaults.headers['Authorization'] = error.config.headers['Authorization'] = "Bearer " + response.data.token;
 
-						return self.axios(error.config);
+						return self.axios.request(error.config);
 					}).catch(function(err) {
 						// Es necesario desloguear al usuario
 						self.logout(true);
@@ -169,6 +177,18 @@ const vm = new Vue({
 				config.data = {};
 			return config;
 		}, Promise.reject)
+		/*axiosInstance.interceptors.response.use(function(c) {
+			console.log("Interceptor previo");
+			return c;
+			//c => c
+		}, function(error) {
+			if(error.response) {
+				Promise.reject(error);
+			} else {
+				console.log("Error ocurred", error);
+				alert("Error fatal");
+			}
+		});*/
 		Vue.use(VueAxios, axiosInstance);
 		
 
@@ -178,3 +198,5 @@ const vm = new Vue({
 		}
 	}
 }).$mount("#app");
+
+// TODO: Error por defecto cuando no haya error.response

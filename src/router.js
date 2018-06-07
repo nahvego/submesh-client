@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import PostList from './views/PostList.vue'
 import Profile from './views/Profile.vue'
-import SidebarHome from './views/SidebarHome.vue'
 import SidebarSub from './views/SidebarSub.vue'
 import NotFound from './views/NotFound.vue'
+
+import Placeholder from './views/components/Placeholder.vue';
 
 Vue.use(Router)
 
@@ -35,7 +36,7 @@ export default new Router({
 			name: 'profile',
 			components: {
 				default: Profile,
-				sidebar: SidebarHome
+				sidebar: Placeholder
 			}
 		},
 		{
