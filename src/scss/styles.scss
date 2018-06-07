@@ -32,6 +32,9 @@ body {
 .pointer {
 	cursor: pointer;
 }
+.cursor {
+	cursor: default;
+}
 
 a[target="_blank"]:not(.blank-opt-out):after {
 	content: '\f35d';
@@ -112,6 +115,10 @@ a {
 	.dropdown-item:not(.active):hover {
 		background-color: darken($light, 10%);
 	}
+}
+
+.tooltip {
+	font-size: 75%;
 }
 
 

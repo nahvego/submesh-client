@@ -2,7 +2,7 @@
 	<li class="list-group-item sm-post-list d-flex flex-row py-0 pl-0">
 		<div class="sm-votes mr-3 align-middle flex-column d-flex text-center justify-content-center">
 			<a :class="thumbsUpClass(post)"></a>
-			<span class="my-2 font-weight-bold small" data-placement="right" data-toggle="tooltip" :title="post.score | formatNumber"> {{ post.score | formatNumberShort }}</span>
+			<span class="my-2 font-weight-bold small cursor" data-placement="right" data-toggle="tooltip" :title="post.score | formatNumber"> {{ post.score | formatNumberShort }}</span>
 			<a :class="thumbsDownClass(post)"></a>
 		</div>
 		<div class="media py-2">
@@ -49,6 +49,9 @@ export default {
 				classes.push("voted");
 			return classes.join(" ");
 		}
+	},
+	created () {
+		$('[data-toggle="tooltip"]').tooltip();
 	}
 }
 </script>
