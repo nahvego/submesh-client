@@ -26,6 +26,14 @@ export default {
 	computed: {
 		...mapGetters([ 'isLogged' ]),
 		...mapState([ 'user' ])
+	},
+	methods: {
+		openLoginModal: function() {
+			$('#modal-login').modal();
+		},
+		openRegisterModal: function() {
+			$('#modal-register').modal();
+		}
 	}
 }
 </script>

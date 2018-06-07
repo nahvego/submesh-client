@@ -15,10 +15,10 @@
 			</div>
 			<p>{{ sub.description }}</p>
 			<template v-if="isSubbed">
-				<button type="button" class="btn btn-outline-primary btn-block" v-if="isSubbed" v-on:click="unsubscribe" onmouseenter="this.textContent='Desuscribirse';this.classList.add('btn-warning');this.classList.remove('btn-outline-primary')" onmouseleave="this.textContent='Suscrito';this.classList.add('btn-outline-primary');this.classList.remove('btn-warning')">Suscrito</button>
-				<button type="button" class="btn btn-primary btn-block" v-if="!isSubbed">Nuevo Post</button>
+				<button type="button" class="btn btn-outline-primary btn-block" v-on:click="subscribeClickEvent" v-on:mouseenter="subscribeHoverEvent" v-on:mouseleave="subscribeOutEvent">Suscrito</button>
+				<button type="button" class="btn btn-secondary btn-block">Nuevo Post</button>
 			</template>
-			<button type="button" class="btn btn-primary btn-block" v-on:click="subscribe" v-else>Suscribirse</button>
+			<button type="button" class="btn btn-primary btn-block" v-on:click="subscribe" v-else-if="isConcreteSub">Suscribirse</button>
 		</div>
 	</div>
 </template>
@@ -52,36 +52,53 @@ export default {
 		...mapGetters([ 'isLogged' ]),
 		...mapState([ 'user' ]),
 		isConcreteSub: function() {
-			return this._isConcreteSub;
+			return this._isConcreteSub();
 		},
 		isSubbed: function() {
 			return this.isLogged && this.user.subscriptions.indexOf(this.sub.urlname) >= 0;
 		}
 	},
 	methods: {
-		openLoginModal: function() {
-			$('#modal-login').modal();
-		},
-		openRegisterModal: function() {
-			$('#modal-register').modal();
-		},
 		subscribe: function() {
-			
+			let self = this;
+			this.$root.axios.post('/subs/' + this.sub.urlname + '/subscriptions').then(function(result) {
+				self.$root.$store.commit('sub', self.sub.urlname);
+				self.sub.subCount++;
+			}).catch(e => {});
 		},
 		unsubscribe: function() {
-
+			let self = this;
+			this.$root.axios.delete('/subs/' + this.sub.urlname + '/subscriptions').then(function(result) {
+				self.$root.$store.commit('unsub', self.sub.urlname);
+				self.sub.subCount--;
+			}).catch(e => {});
 		},
 		_isConcreteSub: function() {
 			return this.$route.params.sub !== "me" && this.$route.params.sub !== "all" && this.$route.params.sub !== undefined;
 		},
 		load: function() {
-			if(!this._isConcreteSub) return;
+			if(!this._isConcreteSub()) return;
 			let self = this;
 			this.$root.axios.get('/subs/' + this.$route.params.sub).then(function(response) {
 				self.sub = response.data;
 			}).catch(function(error) {
 				$('<div class="alert alert-danger">Error inesperado (' + error.response.status + ')</div>').appendTo('#sidebar-sub');
 			})
+		},
+
+// TODO: Fixear esta mierda
+		subscribeClickEvent: function(e) {
+			e.preventDefault();
+			//this.subscribeOutEvent(e);
+			this.unsubscribe();
+		},
+		subscribeHoverEvent: function(e) {
+			e.preventDefault();
+			$(e.target).removeClass('btn-outline-primary').addClass('btn-warning').text('Desuscribirse');
+		},
+		subscribeOutEvent: function(e) {
+			e.preventDefault();
+			$(e.target).removeClass('btn-warning').addClass('btn-outline-primary').text('Suscrito');
 		}
 	}
 }

@@ -25,7 +25,7 @@
 					<a id="navbarProfile" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.name}}</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarProfile">
 						<router-link class="dropdown-item" :to="{ name: 'profile', params: {user: user.name}}">Mi perfil</router-link>
-						<a class="dropdown-item" :click="logout">Salir</a>
+						<a class="dropdown-item" v-on:click="logout">Salir</a>
 					</div>
 				</li>
 				<template v-else>
@@ -62,7 +62,7 @@ export default {
 			$('#modal-register').modal();
 		},
 		logout: function() {
-
+			this.$root.logout();
 		}
 	}
 }

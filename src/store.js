@@ -18,8 +18,14 @@ export default new Vuex.Store({
 			console.log("Logging:", u);
 			state.user = u;
 		},
-		logoff (state) {
+		logout (state) {
 			state.user = null;
+		},
+		sub (state, sub) {
+			state.user.subscriptions.push(sub);
+		},
+		unsub (state, u) {
+			state.user.subscriptions.splice(state.user.subscriptions.indexOf(u), 1);
 		}
 	}
 })
