@@ -10,7 +10,7 @@
 
 <script>
 // @ is an alias to /src
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import PostListItem from './components/PostListItem.vue';
 
 export default {
@@ -20,7 +20,8 @@ export default {
 	},
 	data: function() {
 		return {
-			posts: []
+			posts: [],
+			sub: "Cargando..."
 		}
 	},
 	watch: {
@@ -35,7 +36,7 @@ export default {
 		load() {
 			// Es necesario devolver subUrlname!
 			let requestRoute;
-			if(this.$route.params === undefined && this.isLogged && this.user.subscriptions.length > 0) {
+			if(this.$route.params.sub === undefined && this.isLogged && this.user.subscriptions.length > 0) {
 				this.sub = 'Tu homepage'
 				// Personal personalizada
 				requestRoute = '/subs/me/posts';
@@ -51,7 +52,9 @@ export default {
 			let self = this;
 			this.$root.axios.get(requestRoute).then(function(response) {
 				self.posts = response.data;
-				console.log(self.posts[0].creationDate);
+				self.posts.forEach(function(el) {
+					el.creationDate = new Date(el.creationDate);
+				})
 			}).catch(function(error) {
 				// TODO: Catch errors.
 				console.log(error);
@@ -63,7 +66,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([ 'isLogged' ])
+		...mapGetters([ 'isLogged' ]),
+		...mapState([ 'user' ])
 	}
 }
 </script>

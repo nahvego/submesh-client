@@ -9,12 +9,12 @@
 					<div class="modal-body">
 						<div class="alert alert-danger d-none" role="alert"></div>
 						<div class="form-group">
-							<label for="username">Nombre</label>
-							<input required type="text" class="form-control" id="username" pattern="^(?=(?![0-9]+$))[a-zA-Z0-9_-]{3,15}$" />
+							<label for="i_username">Nombre</label>
+							<input required type="text" class="form-control" id="i_username" pattern="^(?=(?![0-9]+$))[a-zA-Z0-9_-]{3,15}$" />
 						</div>
 						<div class="form-group">
-							<label for="password">Contraseña</label>
-							<input required type="password" class="form-control" id="password" />
+							<label for="i_password">Contraseña</label>
+							<input required type="password" class="form-control" id="i_password" />
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -36,7 +36,7 @@ export default {
 		doLogin: function(e) {
 			e.preventDefault();
 			$('#login').prop('disabled', true);
-			this.$root.login($('#username').val(), $('#password').val()).then(function(a) {
+			this.$root.login($('#i_username').val(), $('#i_password').val()).then(function(a) {
 				$('#modal-login').modal('hide');
 			})
 			.catch(function(e) {

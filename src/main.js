@@ -10,25 +10,67 @@ import navbar from './views/components/NavBar.vue';
 import AlertModal from './views/components/AlertModal.vue';
 import LoginModal from './views/components/LoginModal.vue';
 
+import UrlifyPcge from 'urlify';
+const urlify = UrlifyPcge.create({
+	spaces: "-",
+	nonPrintable: "-",
+	trim: true,
+	failureOutput: "---"
+})
+
 Vue.component('navbar', navbar);
 Vue.component('app', App);
 Vue.component('login-modal', LoginModal);
 Vue.component('alert-modal', AlertModal);
 
 Vue.filter('formatNumber', function(n) {
-	return n;
+	return new Intl.NumberFormat().format(n);
 });
 Vue.filter('formatNumberShort', function(n) {
-	return n;
+	let str;
+	if(n >= 1e6) {
+		let div = n/1e6;
+		str = div.toFixed(1);
+		if(str.charAt(str.length-1) === '0') {
+			str = str.slice(0, -2);
+		}
+		str = str + 'M';
+	} else if(n >= 1e5) {
+		let div = n/1e3;
+		str = Math.floor(div).toString() + "k";
+	} else if(n >= 1e3) {
+		let div = n/1e3;
+		str = div.toFixed(2);
+		while(str.charAt(str.length-1) === '0') {
+			str = str.slice(0, -1);
+			if(str.charAt(str.length-1) === '.') {
+				str = str.slice(0, -1);
+				break;
+			}
+		}
+		str = str + 'k';
+	} else {
+		str = n.toString();
+	}
+	return str;
 });
-Vue.filter('formatDate', function(n) {
-	return n;
+Vue.filter('formatDate', function(d) {
+	return d;
 });
-Vue.filter('formatDateShort', function(n) {
-	return n;
+Vue.filter('formatDateShort', function(d) {
+	let diff = (new Date().getTime() - d) / 1000; // seconds
+	if(diff < 60)
+		return "hace " + diff + " segundos";
+	if(diff < 3600)
+		return "hace " + +(diff/60) + " minutos";
+	if(diff < 86400)
+		return "hace " + Math.round(diff/3600) + " horas";
+	if(diff < 172800)
+		return "ayer";
+	return "hace " + Math.floor(diff/86400) + " días";
 });
-Vue.filter('urlify', function(t) {
-	return t;
+Vue.filter('urlify', function(s) {
+	return urlify(s);
 });
 
 const vm = new Vue({
@@ -39,6 +81,7 @@ const vm = new Vue({
 	},
 	methods: {
 		login: function(user, password) {
+			console.log('loguando con ', user, password)
 			let self = this;
 			return new Promise(function(res, rej) {
 				self.axios.post('/login', {
