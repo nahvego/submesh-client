@@ -52,9 +52,6 @@ export default {
 			let self = this;
 			this.$root.axios.get(requestRoute).then(function(response) {
 				self.posts = response.data;
-				self.posts.forEach(function(el) {
-					el.creationDate = new Date(el.creationDate);
-				})
 			}).catch(function(error) {
 				// TODO: Catch errors.
 				console.log(error);
@@ -83,7 +80,7 @@ export default {
 				$(e.target).toggleClass('voted');
 				if(isNewVote)
 					$(e.target).siblings('.thumbs').removeClass('voted');
-				Object.assign(post, { score: response.data.total });
+				Object.assign(post, { score: response.data.total }); //TODO: Esto no debería funcionar
 			}).catch(e=>{});
 		}
 	},

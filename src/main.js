@@ -62,8 +62,12 @@ Vue.filter('formatNumberShort', function(n) {
 Vue.filter('formatDate', function(d) {
 	return d;
 });
-Vue.filter('formatDateShort', function(d) {
-	let diff = (new Date().getTime() - d) / 1000; // seconds
+Vue.filter('formatDateShort', function(dt) {
+	let d = dt;
+	if(!(d instanceof Date)) {
+		d = new Date(dt);
+	}
+	let diff = (new Date().getTime() - d.getTime()) / 1000; // seconds
 	if(diff < 60)
 		return "hace " + diff + " segundos";
 	if(diff < 3600)

@@ -1,22 +1,37 @@
 <template>
-	<div>PLACEHOLDER!</div>
+	<div class="card">
+		<div class="card-body">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-sm-1 p-2">
+						Esto deberia estar horizontal si es pequeño?
+					</div>
+					<div class="col-12 col-sm-11">
+						<h2>{{ post.title }}</h2>
+						<hr class="m-0 mb-1">
+						<p class="small m-0">Publicado por [link]u/{{ post.authorName }}[/link] <span data-toggle="tooltip" :title="post.creationDate | formatDate">{{ post.creationDate | formatDateShort }}</span></p>
+						<hr class="mt-1 mb-2">
+						{{ post.content }}
+						[comentar]
+						[comentarios en otra card]
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
 // @ is an alias to /src
 import { mapGetters, mapState } from 'vuex';
-import PostListItem from './components/PostListItem.vue';
 
 export default {
 	name: 'home',
-	components: {
-		PostListItem
-	},
 	data: function() {
-		return {
-			posts: [],
-			sub: "Cargando..."
-		}
+		return { post: {} }
+	},
+	components: {
+		
 	},
 	watch: {
 		'$route.params.sub': function(sub) {
@@ -28,27 +43,9 @@ export default {
 	},
 	methods: {
 		load() {
-			// Es necesario devolver subUrlname!
-			let requestRoute;
-			if(this.$route.params.sub === undefined && this.isLogged && this.user.subscriptions.length > 0) {
-				this.sub = 'Tu homepage'
-				// Personal personalizada
-				requestRoute = '/subs/me/posts';
-			} else if(this.$route.params === "all" || this.$route.params.sub === undefined) {
-				this.sub = '/s/all';
-				// s/all
-				requestRoute = '/subs/all/posts';
-			} else {
-				this.sub = '/s/' + this.$route.params.sub;
-				//sub cocreto
-				requestRoute = '/subs/' + this.$route.params.sub + '/posts';
-			}
 			let self = this;
-			this.$root.axios.get(requestRoute).then(function(response) {
-				self.posts = response.data;
-				self.posts.forEach(function(el) {
-					el.creationDate = new Date(el.creationDate);
-				})
+			this.$root.axios.get("/subs/" + this.$route.params.sub + "/posts/" + this.$route.params.post).then(function(response) {
+				self.post = response.data;
 			}).catch(function(error) {
 				// TODO: Catch errors.
 				console.log(error);
@@ -57,28 +54,6 @@ export default {
 		log() {
 			console.log('LOGGING IN');
 			this.$store.commit('login', {"name":"pepe"});
-		},
-
-		handlePLClick (e) {
-			if(!e.target.classList.contains('thumbs-up') && !e.target.classList.contains('thumbs-down'))
-				return;
-
-			let vote = e.target.classList.contains('thumbs-up') ? 1 : -1;
-			let isNewVote = !e.target.classList.contains('voted');
-			let postID = $(e.target).closest("[data-post]").data('post');
-			let post = this.posts.filter(o => o.id == postID)[0];
-			console.log(vote);
-
-			this.$root.axios.request({
-				method: (isNewVote ? "POST" : "DELETE"),
-				url: "/subs/" + post.subUrlname + "/posts/" + postID + "/votes",
-				data: { vote }
-			}).then(function(response) {
-				$(e.target).toggleClass('voted');
-				if(isNewVote)
-					$(e.target).siblings('.thumbs').removeClass('voted');
-				Object.assign(post, { score: response.data.total });
-			}).catch(e=>{});
 		}
 	},
 	computed: {
