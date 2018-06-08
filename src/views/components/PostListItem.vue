@@ -1,5 +1,5 @@
 <template>
-	<li class="list-group-item sm-post-list d-flex flex-row py-0 pl-0">
+	<li class="list-group-item sm-post-list d-flex flex-row py-0 pl-0" :data-post="post.id">
 		<div class="sm-votes mr-3 align-middle flex-column d-flex text-center justify-content-center">
 			<a :class="thumbsUpClass(post)"></a>
 			<span class="my-2 font-weight-bold small cursor" data-placement="right" data-toggle="tooltip" :title="post.score | formatNumber"> {{ post.score | formatNumberShort }}</span>
@@ -38,13 +38,13 @@ export default {
 		},
 
 		thumbsUpClass: function(post) {
-			let classes = "fas fa-thumbs-up text-secondary".split(" ");
+			let classes = "fas fa-thumbs-up thumbs-up thumbs text-secondary".split(" ");
 			if(post.ownVote > 0)
 				classes.push("voted");
 			return classes.join(" ");
 		},
 		thumbsDownClass: function(post) {
-			let classes = "fas fa-thumbs-down text-secondary".split(" ");
+			let classes = "fas fa-thumbs-down thumbs-down thumbs text-secondary".split(" ");
 			if(post.ownVote < 0)
 				classes.push("voted");
 			return classes.join(" ");

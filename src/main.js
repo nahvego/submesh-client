@@ -113,7 +113,6 @@ const vm = new Vue({
 			});
 		},
 		logout: function(force) {
-			console.log('lul');
 			this.$store.commit('logout');
 			delete this.axios.defaults.headers['Authorization'];
 			this.axios.interceptors.response.eject(this.$data.interceptor);

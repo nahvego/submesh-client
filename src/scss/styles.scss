@@ -61,10 +61,10 @@ a[target="_blank"]:not(.blank-opt-out):after {
 	}
 }
 
-.sm-votes .fa-thumbs-up:hover:before, .sm-votes .fa-thumbs-up.voted:before {
+.sm-votes .thumbs-up:hover:before, .sm-votes .thumbs-up.voted:before {
 	color: $green;
 }
-.sm-votes .fa-thumbs-down:hover:before, .sm-votes .fa-thumbs-down.voted:before {
+.sm-votes .thumbs-down:hover:before, .sm-votes .thumbs-down.voted:before {
 	color: $red;
 }
 

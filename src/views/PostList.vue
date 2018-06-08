@@ -1,7 +1,7 @@
 <template>
 	<div class="card">
 		<div class="card-header"><h4 class="mb-0">{{ sub }}</h4></div>
-		<ul class="list-group list-group-flush" v-if="posts.length > 0">
+		<ul class="list-group list-group-flush" v-if="posts.length > 0" v-on:click="handlePLClick">
 			<post-list-item v-for="post in posts" :post="post" :key="post.id"></post-list-item>
 		</ul>
 		<div v-else class="alert alert-warning m-3" role="alert">No hay posts que mostrar</div>
@@ -63,6 +63,28 @@ export default {
 		log() {
 			console.log('LOGGING IN');
 			this.$store.commit('login', {"name":"pepe"});
+		},
+
+		handlePLClick (e) {
+			if(!e.target.classList.contains('thumbs-up') && !e.target.classList.contains('thumbs-down'))
+				return;
+
+			let vote = e.target.classList.contains('thumbs-up') ? 1 : -1;
+			let isNewVote = !e.target.classList.contains('voted');
+			let postID = $(e.target).closest("[data-post]").data('post');
+			let post = this.posts.filter(o => o.id == postID)[0];
+			console.log(vote);
+
+			this.$root.axios.request({
+				method: (isNewVote ? "POST" : "DELETE"),
+				url: "/subs/" + post.subUrlname + "/posts/" + postID + "/votes",
+				data: { vote }
+			}).then(function(response) {
+				$(e.target).toggleClass('voted');
+				if(isNewVote)
+					$(e.target).siblings('.thumbs').removeClass('voted');
+				Object.assign(post, { score: response.data.total });
+			}).catch(e=>{});
 		}
 	},
 	computed: {
