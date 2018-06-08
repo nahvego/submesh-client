@@ -21,6 +21,8 @@ const urlify = UrlifyPcge.create({
 	failureOutput: "---"
 })
 
+const APIURL = 'http://' + document.domain + ':8000/api/v1';
+
 Vue.component('navbar', navbar);
 Vue.component('app', App);
 Vue.component('register-modal', RegisterModal);
@@ -173,7 +175,7 @@ const vm = new Vue({
 	},
 	created: function() {
 		let axiosInstance = axios.create({
-			baseURL: 'http://localhost:8000/api/v1'
+			baseURL: APIURL
 		});
 		axiosInstance.defaults.headers['Content-Type'] = "application/json";
 		axiosInstance.interceptors.request.use(function(config) {
