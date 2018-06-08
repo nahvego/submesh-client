@@ -82,7 +82,6 @@ export default {
 			this.$root.axios.post("/subs/" + this.$route.params.sub + "/posts", postData).then(function(response) {
 				self.$root.$router.push("/s/" + self.$route.params.sub + "/" + response.data.id + "/" + self.$root.$options.filters.urlify(response.data.title));
 			}).catch(function(error) {
-				console.log(error);
 				$('#np_alert').text(error.response.data.msg).removeClass('d-none').get(0).scrollIntoView(false);
 				$('#np_submit').prop('disabled', false);
 			});

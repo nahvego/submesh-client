@@ -13,7 +13,7 @@
 				<h6 class="mb-0">
 					<router-link class="font-weight-bold sm-post-link" :to="{name:'post', params: {sub: post.subUrlname, post: post.id, title: urlify(post.title)}}">{{ post.title }} </router-link>
 				</h6>
-				<a class="sm-post-more" target="_blank" :to="post.link" v-if="post.link">{{ post.link }}</a>
+				<a class="sm-post-more" target="_blank" :href="post.link" v-if="post.link">{{ post.link }}</a>
 				<div class="sm-post-more">
 					<router-link :to="{name:'sub', params: {sub: post.subUrlname }}"><b>/s/{{ post.subUrlname }}</b></router-link> Publicado por <router-link v-if="post.authorName" :to="{name:'profile', params: {user: post.authorName }}">{{ post.authorName }}</router-link><i v-else>[eliminado]</i> <span :title="post.creationDate | formatDate" data-toggle="tooltip" data-placement="top">{{ post.creationDate | formatDateShort }}</span>
 				</div>
