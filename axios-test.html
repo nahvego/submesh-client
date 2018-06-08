@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script>
+			function request() {
+				axios.defaults.headers['Content-Type'] = 'application/json';
+				axios.interceptors.response.use(function(a) {
+					console.log("Interceptor 1");
+					return a;
+				}, function(a) {
+					console.log("Interceptor 1, REJECT");
+					return Promise.reject(a);
+				})
+
+				axios.interceptors.response.use(function(a) {
+					console.log("Interceptor 2");
+					return a;
+				}, function(a) {
+					console.log("Interceptor 2, REJECT");
+					return Promise.reject(a);
+				})
+			
+				axios.get('http://localhost:8000/api/v1/subs/test', {data:{a:'2'}}).then(function(r) {
+					console.log('REQUEST OK');
+				}).catch(function(e) {
+					console.log('REQUEST KO');
+				})
+			}
+		</script>
+	</head>
+	<body>
+		<a onclick="request()">Request</a>
+	</body>
+</html>

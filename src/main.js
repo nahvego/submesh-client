@@ -159,12 +159,10 @@ const vm = new Vue({
 			self.$store.commit('login', userObj);
 
 			self.axios.defaults.headers['Authorization'] = "Bearer " + token;
-			
 			self.$data.interceptor = self.axios.interceptors.response.use(function(r) {
-				//console.log("Axios interceptor (gut)", r);
 				return r;
 			}, function(error) {
-				//console.log("AXIOS INTERCEPTOR!!!!", error.response.status);
+				// Aquí tal vez quitar el interceptor y ponerlo luego
 				if(error.response.status === 401) {
 					self.axios.post('/login', {
 						refresh: localStorage.getItem('refresh')
@@ -175,6 +173,8 @@ const vm = new Vue({
 
 						return self.axios.request(error.config);
 					}).catch(function(err) {
+						if(err.response && err.response.data.errId == 423) // token demasiado rápido
+							return self.axios.request(error.config); // Relanzamos como si hubiera salido bien
 						// Es necesario desloguear al usuario
 						self.logout(true);
 					})
@@ -193,19 +193,15 @@ const vm = new Vue({
 			if(config.data === undefined)
 				config.data = {};
 			return config;
-		}, Promise.reject)
-		/*axiosInstance.interceptors.response.use(function(c) {
-			console.log("Interceptor previo");
-			return c;
-			//c => c
-		}, function(error) {
+		}, e => {return Promise.reject(e)})
+		axiosInstance.interceptors.response.use(c => c, function(error) {
 			if(error.response) {
-				Promise.reject(error);
+				return Promise.reject(error);
 			} else {
 				console.log("Error ocurred", error);
 				alert("Error fatal");
 			}
-		});*/
+		});
 		Vue.use(VueAxios, axiosInstance);
 		
 
