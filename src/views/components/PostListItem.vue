@@ -1,9 +1,9 @@
 <template>
 	<li class="list-group-item sm-post-list d-flex flex-row py-0 pl-0" :data-post="post.id">
 		<div class="sm-votes mr-3 align-middle flex-column d-flex text-center justify-content-center">
-			<a :class="thumbsUpClass(post)"></a>
+			<a class="fas fa-thumbs-up thumbs-up thumbs text-secondary" :class="{ 'voted': post.ownVote>0 }"></a>
 			<span class="my-2 font-weight-bold small cursor" data-placement="right" data-toggle="tooltip" :title="post.score | formatNumber"> {{ post.score | formatNumberShort }}</span>
-			<a :class="thumbsDownClass(post)"></a>
+			<a class="fas fa-thumbs-down thumbs-down thumbs text-secondary" :class="{ 'voted': post.ownVote<0 }"></a>
 		</div>
 		<div class="media py-2">
 			<a href="/EXTERNAL LINK" target="_blank" class="blank-opt-out">
@@ -35,19 +35,6 @@ export default {
 	methods: {
 		urlify: function(s) {
 			return this.$options.filters.urlify(s);
-		},
-
-		thumbsUpClass: function(post) {
-			let classes = "fas fa-thumbs-up thumbs-up thumbs text-secondary".split(" ");
-			if(post.ownVote > 0)
-				classes.push("voted");
-			return classes.join(" ");
-		},
-		thumbsDownClass: function(post) {
-			let classes = "fas fa-thumbs-down thumbs-down thumbs text-secondary".split(" ");
-			if(post.ownVote < 0)
-				classes.push("voted");
-			return classes.join(" ");
 		}
 	},
 	created () {

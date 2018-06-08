@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Post from './views/Post.vue'
 import PostList from './views/PostList.vue'
 import Profile from './views/Profile.vue'
 import SidebarSub from './views/SidebarSub.vue'
@@ -27,7 +28,7 @@ export default new Router({
 			path: '/s/:sub/:post/:title?',
 			name: 'post',
 			components: {
-				default: PostList,
+				default: Post,
 				sidebar: SidebarSub
 			}
 		},
