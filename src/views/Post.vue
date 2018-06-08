@@ -11,7 +11,7 @@
 						<hr class="m-0 mb-1">
 						<p class="small m-0">Publicado por [link]u/{{ post.authorName }}[/link] <span data-toggle="tooltip" :title="post.creationDate | formatDate">{{ post.creationDate | formatDateShort }}</span></p>
 						<hr class="mt-1 mb-2">
-						{{ post.content }}
+						<article v-html="parseContent(post.content)"></article>
 						[comentar]
 						[comentarios en otra card]
 					</div>
@@ -54,6 +54,10 @@ export default {
 		log() {
 			console.log('LOGGING IN');
 			this.$store.commit('login', {"name":"pepe"});
+		},
+		parseContent (text) {
+			console.log(text, 'pC post')
+			return this.$root.$options.filters.parseContent(text);
 		}
 	},
 	computed: {

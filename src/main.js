@@ -12,8 +12,13 @@ import LoginModal from './views/components/LoginModal.vue';
 import RegisterModal from './views/components/RegisterModal.vue';
 
 
-
+import BBCodeParserPcge from 'bbcode-parser'; // Parsea HTML por defecto
 import UrlifyPcge from 'urlify';
+import wysiwyg from 'vue-wysiwyg';
+
+const BBCodeParser = new BBCodeParserPcge(BBCodeParserPcge.defaultTags());
+
+
 const urlify = UrlifyPcge.create({
 	spaces: "-",
 	nonPrintable: "-",
@@ -23,6 +28,7 @@ const urlify = UrlifyPcge.create({
 
 const APIURL = 'http://' + document.domain + ':8000/api/v1';
 
+Vue.use(wysiwyg, {});
 Vue.component('navbar', navbar);
 Vue.component('app', App);
 Vue.component('register-modal', RegisterModal);
@@ -82,6 +88,11 @@ Vue.filter('formatDateShort', function(dt) {
 });
 Vue.filter('urlify', function(s) {
 	return urlify(s);
+});
+
+Vue.filter('parseContent', function(text) {
+	
+	return BBCodeParser.parseString(text);
 });
 
 const vm = new Vue({

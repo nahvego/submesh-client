@@ -16,7 +16,7 @@
 			<p>{{ sub.description }}</p>
 			<template v-if="isSubbed">
 				<button type="button" class="btn btn-outline-primary btn-block" v-on:click="subscribeClickEvent" v-on:mouseenter="subscribeHoverEvent" v-on:mouseleave="subscribeOutEvent">Suscrito</button>
-				<button type="button" class="btn btn-secondary btn-block">Nuevo Post</button>
+				<router-link class="btn btn-secondary btn-block" role="button" :to="{name:'new-post', params: {sub: sub.urlname}}">Nuevo Post</router-link>
 			</template>
 			<button type="button" class="btn btn-primary btn-block" v-on:click="subscribe" v-else-if="isConcreteSub">Suscribirse</button>
 		</div>

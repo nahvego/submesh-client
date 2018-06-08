@@ -7,7 +7,7 @@
 		</div>
 		<div class="media py-2">
 			<a href="/EXTERNAL LINK" target="_blank" class="blank-opt-out">
-				<img :src="post.avatar" class="border border-light rounded" />
+				<img :src="post.image" class="border border-light rounded" />
 			</a>
 			<div class="media-body ml-3">
 				<h6 class="mb-0">

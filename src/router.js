@@ -5,6 +5,7 @@ import PostList from './views/PostList.vue'
 import Profile from './views/Profile.vue'
 import SidebarSub from './views/SidebarSub.vue'
 import NotFound from './views/NotFound.vue'
+import NewPost from './views/NewPost.vue'
 
 import Placeholder from './views/components/Placeholder.vue';
 
@@ -21,6 +22,14 @@ export default new Router({
 			name: 'sub',
 			components: {
 				default: PostList,
+				sidebar: SidebarSub
+			}
+		},
+		{
+			path: '/s/:sub/new',
+			name: 'new-post',
+			components: {
+				default: NewPost,
 				sidebar: SidebarSub
 			}
 		},
