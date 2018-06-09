@@ -18,7 +18,9 @@
 				<button type="button" class="btn btn-outline-primary btn-block" v-on:click="subscribeClickEvent" v-on:mouseenter="subscribeHoverEvent" v-on:mouseleave="subscribeOutEvent">Suscrito</button>
 				<router-link class="btn btn-secondary btn-block" role="button" :to="{name:'new-post', params: {sub: sub.urlname}}">Nuevo Post</router-link>
 			</template>
-			<button type="button" class="btn btn-primary btn-block" v-on:click="subscribe" v-else-if="isConcreteSub">Suscribirse</button>
+			<template v-else-if="isConcreteSub">
+				<input type="button" value="Suscribirse" id="subagainbutton" class="btn btn-primary btn-block" v-on:click="subscribe">
+			</template>
 		</div>
 	</div>
 </template>

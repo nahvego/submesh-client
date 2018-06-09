@@ -28,6 +28,8 @@ const urlify = UrlifyPcge.create({
 
 const APIURL = 'http://' + document.domain + ':8000/api/v1';
 
+Vue.config.devtools = true;
+
 Vue.use(wysiwyg, {});
 Vue.component('navbar', navbar);
 Vue.component('app', App);
