@@ -22,7 +22,13 @@
 import { mapGetters, mapState } from 'vuex';
 
 export default {
-  	name: 'sidebar-home',
+	name: 'sidebar-home',
+	data: function() {
+		return {
+			memberCount: 0,
+			subCount: 0
+		}
+	},
 	computed: {
 		...mapGetters([ 'isLogged' ]),
 		...mapState([ 'user' ])

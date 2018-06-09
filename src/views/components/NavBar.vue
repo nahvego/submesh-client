@@ -54,6 +54,13 @@ export default {
 		...mapGetters([ 'isLogged' ]),
 		...mapState([ 'user' ])
 	},
+	watch: {
+		'user': function(user) {
+			console.log('VIVA EL VINO');
+			if(user !== null)
+				this.$nextTick(() => { console.log("NAVBAR", $('#navbar-m .dropdown-toggle')); $('#navbar-m .dropdown-toggle').dropdown(); });
+		}
+	},
 	methods: {
 		openLoginModal: function() {
 			$('#modal-login').modal();

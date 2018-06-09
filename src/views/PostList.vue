@@ -32,7 +32,7 @@ export default {
 			if(null === user) {
 				// logout
 				this.posts.forEach(post => {
-					delete post.ownVote;
+					post.ownVote = undefined; // UGH
 				})
 			} else {
 				// recargamos para cargar votos y esa mierda
