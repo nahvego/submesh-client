@@ -6,9 +6,12 @@
 			<a class="fas fa-thumbs-down thumbs-down thumbs text-secondary" :class="{ 'voted': post.ownVote<0 }"></a>
 		</div>
 		<div class="media py-2">
-			<a href="/EXTERNAL LINK" target="_blank" class="blank-opt-out">
-				<img :src="post.image" class="border border-light rounded" />
+			<a v-if="post.link" target="_blank" class="blank-opt-out mt-2 target-blank-image" :href="post.link">
+				<img :src="post.image" class="border border-light rounded">
 			</a>
+			<router-link :to="{name:'post', params: {sub: post.subUrlname, post: post.id, title: urlify(post.title)}}" class="mt-2" v-else>
+				<img :src="post.image" class="border border-light rounded">
+			</router-link>
 			<div class="media-body ml-3">
 				<h6 class="mb-0">
 					<router-link class="font-weight-bold sm-post-link" :to="{name:'post', params: {sub: post.subUrlname, post: post.id, title: urlify(post.title)}}">{{ post.title }} </router-link>

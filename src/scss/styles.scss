@@ -122,6 +122,26 @@ a {
 }
 
 
+// Imágenes enlace exterior
+
+.target-blank-image {
+	position: relative;
+}
+.target-blank-image:before {
+	content: '\f35d';
+	font-family: FAwesome;
+	font-size: 80%;
+	margin-left: $spacer*.25;
+	line-height: 1;
+	position: absolute;
+	background-color: $white;
+	bottom: 0;
+	right: 0;
+	padding: 2px;
+	border-top-left-radius: 2px;
+}
+
+
 // TODO: Solucionar esta basura
 @font-face {
 	font-family: FAwesome;
