@@ -79,7 +79,7 @@ Vue.filter('formatDateShort', function(dt) {
 	if(diff < 60)
 		return "hace " + diff + " segundos";
 	if(diff < 3600)
-		return "hace " + +(diff/60) + " minutos";
+		return "hace " + Math.floor(diff/60) + " minutos";
 	if(diff < 86400)
 		return "hace " + Math.round(diff/3600) + " horas";
 	if(diff < 172800)
@@ -173,8 +173,14 @@ const vm = new Vue({
 
 						return self.axios.request(error.config);
 					}).catch(function(err) {
-						if(err.response && err.response.data.errId == 423) // token demasiado rápido
-							return self.axios.request(error.config); // Relanzamos como si hubiera salido bien
+						if(err.response && err.response.data.errId == 423) {// token demasiado rápido
+							return self.axios.request({
+								url: error.config.url,
+								method: error.config.method,
+								params: error.config.params,
+								data: error.config.data
+							}); // Relanzamos como si hubiera salido bien
+						}
 						// Es necesario desloguear al usuario
 						self.logout(true);
 					})

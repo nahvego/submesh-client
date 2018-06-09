@@ -27,6 +27,17 @@ export default {
 	watch: {
 		'$route.params.sub': function(sub) {
 			this.load();
+		},
+		'user': function(user) {
+			if(null === user) {
+				// logout
+				this.posts.forEach(post => {
+					delete post.ownVote;
+				})
+			} else {
+				// recargamos para cargar votos y esa mierda
+				this.load();
+			}
 		}
 	},
 	created () {
@@ -56,10 +67,6 @@ export default {
 				// TODO: Catch errors.
 				console.log(error);
 			});
-		},
-		log() {
-			console.log('LOGGING IN');
-			this.$store.commit('login', {"name":"pepe"});
 		},
 
 		handlePLClick (e) {
