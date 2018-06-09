@@ -78,11 +78,34 @@ export default {
 			let postData = Object.assign({}, this.post);
 			if(postData.image.length === 0)
 				delete postData.image;
+			if(postData.link.length === 0)
+				delete postData.link;
 
 			this.$root.axios.post("/subs/" + this.$route.params.sub + "/posts", postData).then(function(response) {
 				self.$root.$router.push("/s/" + self.$route.params.sub + "/" + response.data.id + "/" + self.$root.$options.filters.urlify(response.data.title));
 			}).catch(function(error) {
-				$('#np_alert').text(error.response.data.msg).removeClass('d-none').get(0).scrollIntoView(false);
+				let errStr = error.response.data.msg;
+				if(error.response.data.errors !== undefined) {
+					let arr = [];
+					for(let obj of error.response.data.errors) {
+						switch(obj.field) {
+							case 'title':
+								arr.push('<strong>Título</strong>: Entre 5 y 50 carácteres');
+								break;
+							case 'link':
+								arr.push('<strong>Enlace</strong>: Enlace inválido (¿Has incluído el protocolo?)');
+								break;
+							case 'image':
+								arr.push('<strong>Imagen</strong>: Imágen inválida (GIF, PNG, JPG o JPEG)');
+								break;
+							case 'content':
+								arr.push('<strong>Contenido</strong>: Al menos 10 carácteres');
+								break;
+						}
+					}
+					errStr = arr.join('<br>')
+				}
+				$('#np_alert').html(errStr).removeClass('d-none').get(0).scrollIntoView(false);
 				$('#np_submit').prop('disabled', false);
 			});
 		}
