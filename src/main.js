@@ -11,6 +11,7 @@ import AlertModal from './views/components/AlertModal.vue';
 import LoginModal from './views/components/LoginModal.vue';
 import RegisterModal from './views/components/RegisterModal.vue';
 
+import urlparser from 'url-parse';
 
 import BBCodeParserPcge from 'bbcode-parser'; // Parsea HTML por defecto
 import UrlifyPcge from 'urlify';
@@ -96,6 +97,9 @@ Vue.filter('parseContent', function(text) {
 	
 	return BBCodeParser.parseString(text);
 });
+
+/* BUS */
+Vue.prototype.$bus = null;
 
 const vm = new Vue({
   	router,
@@ -190,7 +194,19 @@ const vm = new Vue({
 					return Promise.reject(error);
 				}
 			})
-		}
+		},
+
+		initClickCatcher () {
+			let self = this;
+			document.body.addEventListener('click', function(e) {
+				if(e.target.tagName.toLowerCase() === 'a') {
+					let url = new urlparser(e.target.href);
+					if(url.host === document.location.host && url.pathname === document.location.pathname && url.hash === document.location.hash) {
+						self.$bus.$emit('url.update');
+					}
+				}
+			})
+		} 
 	},
 	created: function() {
 		let axiosInstance = axios.create({
@@ -217,6 +233,10 @@ const vm = new Vue({
 		if(null !== u) {
 			this._completeLogin(JSON.parse(u));
 		}
+
+		this.initClickCatcher();
+
+		this.$bus = new Vue();
 	}
 }).$mount("#app");
 

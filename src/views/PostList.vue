@@ -41,6 +41,13 @@ export default {
 		}
 	},
 	created () {
+		// Init
+		// AL usar => THIS es el correcto
+		this.$root.$bus.$on('url.update', () => {
+			this.load();
+		})
+
+		// Carga
 		this.load();
 	},
 	methods: {

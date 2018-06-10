@@ -61,15 +61,18 @@ a[target="_blank"]:not(.blank-opt-out):after {
 	}
 }
 
-.sm-votes .thumbs-up:hover:before, .sm-votes .thumbs-up.voted:before {
+.thumbs-up:hover:before, .thumbs-up.voted:before {
 	color: $green;
 }
-.sm-votes .thumbs-down:hover:before, .sm-votes .thumbs-down.voted:before {
+.thumbs-down:hover:before, .thumbs-down.voted:before {
 	color: $red;
 }
 
 a {
 	cursor: pointer;
+}
+a:hover {
+	text-decoration: underline;
 }
 
 .sm-post-link {
