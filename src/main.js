@@ -121,7 +121,9 @@ const vm = new Vue({
 					let userObj = {
 						name: response.data.name,
 						id: response.data.userID,
-						subscriptions: response.data.subscriptions
+						subscriptions: response.data.subscriptions,
+						permissions: response.data.permissions,
+						subPermissions: response.data.subPermissions
 					}
 					localStorage.setItem('user', JSON.stringify(userObj));
 					localStorage.setItem('sess', response.data.token);
