@@ -97,3 +97,9 @@ $comment-line-color-hover: #94B7EB;
 	background-color: $comment-line-color-hover;
 }
 </style>
+
+<style>
+.comment .container {
+	padding: 0;
+}
+</style>
