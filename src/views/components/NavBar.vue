@@ -22,7 +22,7 @@
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item dropdown" v-if="isLogged">
-					<a id="navbarProfile" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.name}}</a>
+					<a key="loginDrop" id="navbarProfile" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.name}}</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarProfile">
 						<router-link class="dropdown-item" :to="{ name: 'profile', params: {user: user.name}}">Mi perfil</router-link>
 						<a class="dropdown-item" v-on:click="logout">Salir</a>
