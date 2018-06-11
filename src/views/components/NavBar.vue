@@ -1,6 +1,6 @@
 <template>
 	<nav id="navbar-m" class="navbar navbar-expand-lg fixed-top navbar-light bg-light border-bottom">
-		<a class="navbar-brand" href="#">Submesh</a>
+		<router-link class="navbar-brand" to="/">Submesh</router-link>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>

@@ -68,8 +68,12 @@ Vue.filter('formatNumberShort', function(n) {
 	}
 	return str;
 });
-Vue.filter('formatDate', function(d) {
-	return d;
+Vue.filter('formatDate', function(dt) {
+	let d = dt;
+	if(!(d instanceof Date)) {
+		d = new Date(dt);
+	}
+	return d.toLocaleString();
 });
 Vue.filter('formatDateShort', function(dt) {
 	let d = dt;
@@ -78,7 +82,7 @@ Vue.filter('formatDateShort', function(dt) {
 	}
 	let diff = (new Date().getTime() - d.getTime()) / 1000; // seconds
 	if(diff < 60)
-		return "hace " + diff + " segundos";
+		return "hace " + Math.floor(diff) + " segundos";
 	if(diff < 3600)
 		return "hace " + Math.floor(diff/60) + " minutos";
 	if(diff < 86400)

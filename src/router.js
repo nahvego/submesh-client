@@ -6,6 +6,7 @@ import Profile from './views/Profile.vue'
 import SidebarSub from './views/SidebarSub.vue'
 import NotFound from './views/NotFound.vue'
 import NewPost from './views/NewPost.vue'
+import NewSub from './views/NewSub.vue'
 
 import Placeholder from './views/components/Placeholder.vue';
 
@@ -46,6 +47,14 @@ export default new Router({
 			name: 'profile',
 			components: {
 				default: Profile,
+				sidebar: Placeholder
+			}
+		},
+		{
+			path: '/new-sub',
+			name: 'new-sub',
+			components: {
+				default: NewSub,
 				sidebar: Placeholder
 			}
 		},

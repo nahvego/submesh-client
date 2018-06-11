@@ -4,7 +4,7 @@
 			<template v-if="isLogged">
 				<p>Bienvenido de nuevo <b>{{ user.name }}</b></p>
 				<p>Puedes personalizar esta página suscribiéndote a subs que te interesen o</p>
-				<button class="btn btn-lg btn-block btn-primary">Crear un nuevo sub</button>
+				<router-link class="btn btn-lg btn-block btn-primary" to="new-sub">Crear un nuevo sub</router-link>
 			</template>
 			<template v-else>
 				<p>¡Bienvenido!</p>
