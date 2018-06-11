@@ -25,7 +25,7 @@ const urlify = UrlifyPcge.create({
 	failureOutput: "---"
 })
 
-const APIURL = 'http://' + document.domain + ':8000/api/v1';
+const APIURL = 'https://' + document.domain + ':8000/api/v1';
 
 Vue.config.devtools = true;
 
