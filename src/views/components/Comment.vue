@@ -21,6 +21,7 @@
 				<ul class="list-inline small list-separated text-muted m-0">
 					<li class="list-inline-item"><a href="#" class="open-reply text-muted">Responder</a></li>
 					<li class="list-inline-item">Compartir</li>
+					<li class="list-inline-item" v-if="isAllowedTo('remove-comments', sub, comment.authorID)">Borrar</li>
 				</ul>
 				<form action="#" @submit="reply" class="mt-2 reply-form d-none text-right">
 					<input type="hidden" name="replyTo" :value="comment.id">
@@ -28,7 +29,7 @@
 					<button type="submit" class="btn btn-primary loading-ready">Comentar</button>
 				</form>
 				<div class="container replies-container" v-if="comment.replies.length > 0">
-					<single-comment v-for="reply in comment.replies" :key="reply.id" :comment="reply"></single-comment>
+					<single-comment v-for="reply in comment.replies" :key="reply.id" :comment="reply" :sub="sub"></single-comment>
 				</div>
 			</div>
 		</div>
@@ -48,10 +49,11 @@
 
 <script>
 import SingleComment from './Comment.vue'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'single-comment',
-	props: ['comment'],
+	props: ['comment', 'sub'],
 	components: {
 		SingleComment
 	},
@@ -62,6 +64,9 @@ export default {
 		parseContent (text) {
 			return this.$root.$options.filters.parseContent(text);
 		}
+	},
+	computed: {
+		...mapGetters([ 'isAllowedTo' ])
 	}
 }
 </script>

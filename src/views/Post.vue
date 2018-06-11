@@ -32,7 +32,7 @@
 			<a id="comments"></a>
 			<div class="card-body" v-if="post.comments" @click="handleCommentClick">
 				<div class="container" style="padding:1rem !important" id="comment-container">
-					<single-comment v-for="comment in post.comments" :key="comment.id" :comment="comment"></single-comment>
+					<single-comment v-for="comment in post.comments" :key="comment.id" :comment="comment" :sub="post.subUrlname"></single-comment>
 				</div>
 			</div>
 		</section>

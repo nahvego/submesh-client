@@ -12,7 +12,8 @@ export default new Vuex.Store({
 			return state.user !== null;
 		},
 
-		isAllowedTo: (state, perm, sub, optionalID) => {
+		isAllowedTo: state => (perm, sub, optionalID) => {
+			console.log(perm, sub, optionalID)
 			return state.user !== null && (state.user.id == optionalID || state.user.permissions.indexOf(perm) >= 0 || (sub && state.user.subPermissions[sub] && state.user.sub_permissions[sub].permissions.indexOf(perm)));
 		}
 	},
