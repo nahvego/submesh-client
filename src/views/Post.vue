@@ -12,7 +12,13 @@
 						<div class="col-12 col-sm-11">
 							<h2>{{ post.title }}</h2>
 							<hr class="m-0 mb-1">
-							<p class="small m-0">Publicado por <router-link v-if="post.authorID" :to="{name:'profile', params:{user:post.authorID}}">u/{{ post.authorName }}</router-link><i v-else>[eliminado]</i> <span data-toggle="tooltip" :title="post.creationDate | formatDate">{{ post.creationDate | formatDateShort }}</span></p>
+							<p class="small m-0">
+								Publicado por <router-link v-if="post.authorID" :to="{name:'profile', params:{user:post.authorID}}">u/{{ post.authorName }}</router-link><i v-else>[eliminado]</i> <span data-toggle="tooltip" :title="post.creationDate | formatDate">{{ post.creationDate | formatDateShort }}</span>
+								<span class="float-right post-options">
+									<router-link :to="{name:'edit-post', params: { post: post.id }}" class="fas fa-edit mr-2" v-if="isAllowedTo('edit-posts', post.subUrlname, post.authorID)"></router-link>
+									<a @click="confirmDeletePost" class="fas fa-trash-alt" v-if="isAllowedTo('delete-posts', post.subUrlname, post.authorID)"></a>
+								</span>
+							</p>
 							<hr class="mt-1 mb-2">
 							<article v-html="parseContent(post.content)"></article>
 						</div>
@@ -96,9 +102,12 @@ export default {
 
 			}).catch(function(error) {
 				// TODO: Catch errors.
-				if(error.status === 404)
-					$('#post-section').html('<div class="alert alert-danger">Post no existe</div>');
-				else
+				if(error.status === 404) {
+					this.$root.alert('El post no existe')
+					$('#modal-alert').once('hidden.bs.modal', () => {
+						this.$root.$router.push('/')
+					})
+				} else
 					console.log(error);
 			});
 		},
@@ -157,8 +166,17 @@ export default {
 					this.post.comments.unshift(response.data);
 					this.commentList.push(this.post.comments[0]);
 				}
+
+				// Ocultar el este
+				e.target.elements['content'].value = '';
+				e.target.classList.add('d-none')
 				
 			})
+		},
+
+		confirmDeletePost (e) {
+			e.preventDefault()
+			this.$root.prompt('¿Seguro que quieres borrar este post?', () => this.deletePost(e), 'Borrar')
 		},
 
 		deleteComment (e) {
@@ -167,11 +185,21 @@ export default {
 			let comment = $(e.target).closest('[data-comment]').data('comment');
 			this.$root.axios.delete('/subs/' + sub + '/posts/' + post + '/comments/' + comment).then((response) => {
 				this.commentList.filter(o => o.id == comment).forEach((o) => { o.deleted = true; o.content = null; })
-			});
+			}).catch((error) => {
+				this.alert(error.response.data.msg)
+			})
+		},
+
+		deletePost (e) {
+			this.$root.axios.delete('/subs/' + this.post.subUrlname + '/posts/' + this.post.id).then((response) => {
+				this.$root.$router.push('/s/' + this.post.subUrlname);
+			}).catch((error) => {
+				this.$root.alert(error.response.data.msg)
+			})
 		}
 	},
 	computed: {
-		...mapGetters([ 'isLogged' ]),
+		...mapGetters([ 'isLogged', 'isAllowedTo' ]),
 		...mapState([ 'user' ])
 	}
 }
@@ -180,6 +208,15 @@ export default {
 <style scoped lang="scss">
 
 @import "../scss/imports.scss";
+
+.post-options a {
+	color: inherit;
+	text-decoration: none;
+
+	&:hover {
+		color: $gray-600;
+	}
+}
 
 .post-vote-count {
 

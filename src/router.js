@@ -36,6 +36,14 @@ export default new Router({
 			}
 		},
 		{
+			path: '/s/:sub/edit/:post',
+			name: 'edit-post',
+			components: {
+				default: NewPost,
+				sidebar: SidebarSub
+			}
+		},
+		{
 			path: '/s/:sub/:post/:title?',
 			name: 'post',
 			components: {
