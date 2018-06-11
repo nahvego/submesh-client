@@ -1,10 +1,10 @@
 <template>
-	<main id="post-container">
+	<main id="post-container" :data-post="post.id">
 		<section class="card" id="post-section">
 			<div class="card-body">
 				<div class="container">
 					<div class="row">
-						<div class="col-12 col-sm-1 pr-2 py-2 post-vote-count pl-0">
+						<div class="col-12 col-sm-1 pr-2 py-2 post-vote-count pl-0" @click="handleVoteClick">
 							<a class="fas fa-thumbs-up thumbs-up thumbs text-secondary d-sm-block" :class="{ 'voted': post.ownVote>0 }"></a>
 							<span class="my-2 font-weight-bold small cursor d-md-block mx-1" data-placement="right" data-toggle="tooltip" :title="post.score | formatNumber"> {{ post.score | formatNumberShort }}</span>
 							<a class="fas fa-thumbs-down thumbs-down thumbs text-secondary d-sm-block" :class="{ 'voted': post.ownVote<0 }"></a>
@@ -107,6 +107,13 @@ export default {
 				parent.children('.comment').show();
 
 			}
+		},
+		
+		handleVoteClick (e) {
+			if(!e.target.classList.contains('thumbs-up') && !e.target.classList.contains('thumbs-down'))
+				return;
+
+			this.$root.votePost(e, this.post);
 		},
 
 		newComment () {

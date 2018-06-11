@@ -206,7 +206,36 @@ const vm = new Vue({
 					}
 				}
 			})
-		} 
+		},
+
+
+
+
+		/*////////////////// HELPERS Y GLOBALS Y TAL
+		e -> evento
+		posts -> lista de post o post único
+		callback y error -> pos eso
+
+		*/
+		votePost(e, posts, callback, error) {
+			let vote = e.target.classList.contains('thumbs-up') ? 1 : -1;
+			let isNewVote = !e.target.classList.contains('voted');
+			let postID = $(e.target).closest("[data-post]").data('post');
+			let post = (posts.filter !== undefined ? posts.filter(o => o.id == postID)[0] : posts);
+
+			this.$root.axios.request({
+				method: (isNewVote ? "POST" : "DELETE"),
+				url: "/subs/" + post.subUrlname + "/posts/" + postID + "/votes",
+				data: { vote }
+			}).then(callback || function(response) {
+				$(e.target).toggleClass('voted');
+				if(isNewVote)
+					$(e.target).siblings('.thumbs').removeClass('voted');
+				
+				Vue.set(post, "score", response.data.total)
+				//post = Object.assign({},post, { score: response.data.total }); //TODO: Esto no debería funcionar
+			}).catch(error || (e=>{}));
+		}
 	},
 	created: function() {
 		let axiosInstance = axios.create({

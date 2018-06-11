@@ -80,22 +80,7 @@ export default {
 			if(!e.target.classList.contains('thumbs-up') && !e.target.classList.contains('thumbs-down'))
 				return;
 
-			let vote = e.target.classList.contains('thumbs-up') ? 1 : -1;
-			let isNewVote = !e.target.classList.contains('voted');
-			let postID = $(e.target).closest("[data-post]").data('post');
-			let post = this.posts.filter(o => o.id == postID)[0];
-			console.log(vote);
-
-			this.$root.axios.request({
-				method: (isNewVote ? "POST" : "DELETE"),
-				url: "/subs/" + post.subUrlname + "/posts/" + postID + "/votes",
-				data: { vote }
-			}).then(function(response) {
-				$(e.target).toggleClass('voted');
-				if(isNewVote)
-					$(e.target).siblings('.thumbs').removeClass('voted');
-				Object.assign(post, { score: response.data.total }); //TODO: Esto no debería funcionar
-			}).catch(e=>{});
+			this.$root.votePost(e, this.posts);
 		}
 	},
 	computed: {
