@@ -28,7 +28,7 @@
 <script>
 // @ is an alias to /src
 import { mapGetters, mapState } from 'vuex';
-import SidebarHome from './components/SidebarHome.vue'
+import SidebarHome from './SidebarHome.vue'
 
 export default {
 	name: 'sidebar-sub',

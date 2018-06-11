@@ -4,6 +4,7 @@ import Post from './views/Post.vue'
 import PostList from './views/PostList.vue'
 import Profile from './views/Profile.vue'
 import SidebarSub from './views/SidebarSub.vue'
+import SidebarHome from './views/SidebarHome.vue'
 import NotFound from './views/NotFound.vue'
 import NewPost from './views/NewPost.vue'
 import NewSub from './views/NewSub.vue'
@@ -55,7 +56,7 @@ export default new Router({
 			name: 'new-sub',
 			components: {
 				default: NewSub,
-				sidebar: Placeholder
+				sidebar: SidebarHome
 			}
 		},
 		{
