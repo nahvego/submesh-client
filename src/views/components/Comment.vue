@@ -16,7 +16,8 @@
 					<li class="list-inline-item">{{ comment.score | formatNumber }}</li>
 					<li class="list-inline-item cursor" :title="comment.creationDate | formatDate" data-toggle="tooltip">{{ comment.creationDate | formatDateShort }}</li>
 				</ul>
-				<div v-html="parseContent(comment.content)"></div>
+				<div v-html="parseContent(comment.content)" v-if="comment.content"></div>
+				<div v-else><i>[Eliminado]</i></div>
 				<ul class="list-inline small list-separated text-muted m-0">
 					<li class="list-inline-item"><a href="#" @click="reply" class="text-muted">Responder</a></li>
 					<li class="list-inline-item">Compartir</li>

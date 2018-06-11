@@ -106,6 +106,8 @@ export default {
 				parent.children('.collapse-title').addClass('d-none');
 				parent.children('.comment').show();
 
+			} else if(e.target.classList.contains('thumbs-up') || e.target.classList.contains('thumbs-down')) {
+				console.log('votar .)')
 			}
 		},
 		
