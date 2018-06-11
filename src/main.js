@@ -152,15 +152,25 @@ const vm = new Vue({
 			}
 		},
 		alert: function(err) {
-			alert(err);
-			return;
 			if(typeof err === "string") {
-				// solo dejamos elc uerpo con msg
-			} else if(err instanceof HTMLElement) {
+				this.$bus.$emit('alert.modal', { body: err });
 			} else {
-				// Cogemos titulo cuerpo y botones?
+				let obj = err;
+				obj.mode = 'alert';
+				this.$bus.$emit('alert.modal', obj);
 			}
-			$('#modal-alert').modal();
+		},
+		prompt: function(err, callback, okBtn, cancelBtn) {
+			if(typeof err === "string") {
+				this.$bus.$emit('alert.modal', { body: err, mode: "prompt", cancelBtn, okBtn, callback });
+			} else {
+				let obj = err;
+				obj.mode = 'prompt';
+				obj.okBtn = okBtn;
+				obj.cancelBtn = cancelBtn;
+				obj.callback = callback;
+				this.$bus.$emit('alert.modal', obj);
+			}
 		},
 
 		_completeLogin: function(userObj, token) {

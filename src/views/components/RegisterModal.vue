@@ -1,5 +1,5 @@
 <template>
-	<div id="modal-register" class="modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modalRegiser">
+	<div key="modal-register" id="modal-register" class="modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modalRegiser">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<form role="form" action="#" v-on:submit="doRegister($event)">

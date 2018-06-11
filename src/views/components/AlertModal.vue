@@ -1,26 +1,13 @@
 <template>
-	<div id="modal-alert" class="modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modalLogin">
+	<div key="modal-alert" id="modal-alert" class="modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modalAlert">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
-				<form role="form" action="#" v-on:submit="doLogin($event)">
-					<div class="modal-header bg-wave">
-						<h4 class="modal-title">Login</h4>
-					</div>
-					<div class="modal-body">
-						<div class="alert alert-danger d-none" role="alert"></div>
-						<div class="form-group">
-							<label for="username">Nombre</label>
-							<input required type="text" class="form-control" id="username" pattern="^(?=(?![0-9]+$))[a-zA-Z0-9_-]{3,15}$" />
-						</div>
-						<div class="form-group">
-							<label for="password">Contraseña</label>
-							<input required type="password" class="form-control" id="password" />
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary loading-ready" id="login">Entrar</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-					</div>
+				<div class="modal-header bg-wave">
+					<h4 class="modal-title"> {{ title }}</h4>
+				</div>
+				<div class="modal-body">{{ body }}</div>
+				<form @submit="yieldPrompt">
+					<div class="modal-footer" v-html="buttons"></div>
 				</form>
 			</div>
 		</div>
@@ -31,6 +18,53 @@
 import { mapGetters, mapState } from 'vuex';
 
 export default {
-  	name: 'alert-modal'
+	  name: 'alert-modal',
+
+	  data: function() {
+		  return {
+			  title: 'Alerta',
+			  body: '',
+			  mode: 'alert',
+			  okBtn: 'OK',
+			  cancelBtn: 'Cancelar',
+			  callback: () =>{}
+		  }
+	  },
+
+	  methods: {
+		  yieldPrompt (e) {
+			  e.preventDefault();
+			  $('#modal-alert').modal('hide');
+			  this.callback();
+		  }
+	  },
+
+	  computed: {
+		  buttons () {
+			  if(this.mode === 'alert') {
+				  return '<button type="button" class="btn btn-primary" data-dismiss="modal" key="close">' + this.okBtn + '</button>';
+			  } else if(this.mode === 'prompt') {
+				  return '<button type="submit" class="btn btn-danger">' + this.okBtn + '</button>' +
+				  '<button type="button" class="btn btn-secondary" data-dismiss="modal" key="close">' + this.cancelBtn + '</button>';
+			  }
+		  },
+		  classes () {
+			  return {};
+		  }
+	  },
+	  
+	  created () {
+		  this.$root.$bus.$on('alert.modal', (payload) => {
+			  console.log(payload)
+			  this.title = payload.title || 'Error';
+			  this.body = payload.body || 'Oops';
+			  this.mode = payload.mode || 'alert';
+			  this.okBtn = payload.okBtn || 'OK';
+			  this.cancelBtn = payload.cancelBtn || 'Cancelar'
+			  this.callback = payload.callback || (() => {})
+
+			  $('#modal-alert').modal();
+		  })
+	  }
 }
 </script>

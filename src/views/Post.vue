@@ -121,6 +121,11 @@ export default {
 			} else if(e.target.classList.contains('open-reply')) {
 				e.preventDefault();
 				$(e.target).closest('.comment').children('.comment-right').children('.reply-form').removeClass('d-none');
+			} else if(e.target.classList.contains('delete-comment')) {
+				e.preventDefault()
+				this.$root.prompt('¿Seguro que quieres borrar este comentario?', () => this.deleteComment(e), 'Borrar')
+			} else if(e.target.classList.contains('open-edit-comment')) {
+				console.log('noce');
 			}
 		},
 		
@@ -154,6 +159,15 @@ export default {
 				}
 				
 			})
+		},
+
+		deleteComment (e) {
+			let sub = $(e.target).closest('[data-sub]').data('sub');
+			let post = $(e.target).closest('[data-post]').data('post');
+			let comment = $(e.target).closest('[data-comment]').data('comment');
+			this.$root.axios.delete('/subs/' + sub + '/posts/' + post + '/comments/' + comment).then((response) => {
+				this.commentList.filter(o => o.id == comment).forEach((o) => { o.deleted = true; o.content = null; })
+			});
 		}
 	},
 	computed: {

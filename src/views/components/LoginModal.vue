@@ -1,5 +1,5 @@
 <template>
-	<div id="modal-login" class="modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modalLogin">
+	<div key="modal-login" id="modal-login" class="modal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modalLogin">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<form role="form" action="#" v-on:submit="doLogin($event)">

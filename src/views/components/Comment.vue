@@ -16,12 +16,13 @@
 					<li class="list-inline-item">{{ comment.score | formatNumber }}</li>
 					<li class="list-inline-item cursor" :title="comment.creationDate | formatDate" data-toggle="tooltip">{{ comment.creationDate | formatDateShort }}</li>
 				</ul>
-				<div v-html="parseContent(comment.content)" v-if="comment.content"></div>
+				<div v-html="parseContent(comment.content)" v-if="!comment.deleted"></div>
 				<div v-else><i>[Eliminado]</i></div>
 				<ul class="list-inline small list-separated text-muted m-0">
 					<li class="list-inline-item"><a href="#" class="open-reply text-muted">Responder</a></li>
 					<li class="list-inline-item">Compartir</li>
-					<li class="list-inline-item" v-if="isAllowedTo('remove-comments', sub, comment.authorID)">Borrar</li>
+					<li class="list-inline-item" v-if="!comment.deleted && isAllowedTo('delete-comments', sub, comment.authorID)"><a href="#" class="delete-comment text-muted">Borrar</a></li>
+					<li class="list-inline-item" v-if="!comment.deleted && isAllowedTo('edit-comments', sub, comment.authorID)"><a href="#" class="open-edit-comment text-muted">Editar</a></li>
 				</ul>
 				<form action="#" @submit="reply" class="mt-2 reply-form d-none text-right">
 					<input type="hidden" name="replyTo" :value="comment.id">
@@ -62,7 +63,7 @@ export default {
 			this.$parent.newComment(e);
 		},
 		parseContent (text) {
-			return this.$root.$options.filters.parseContent(text);
+			return this.$root.$options.filters.parseContent(text || "");
 		}
 	},
 	computed: {
