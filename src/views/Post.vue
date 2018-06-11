@@ -1,5 +1,5 @@
 <template>
-	<main id="post-container" :data-post="post.id">
+	<main id="post-container" :data-post="post.id" :data-sub="post.subUrlname">
 		<section class="card" id="post-section">
 			<div class="card-body">
 				<div class="container">
@@ -57,7 +57,8 @@ export default {
 				creationDate: new Date(),
 				content: "",
 				comments: []
-			}
+			},
+			commentList: []
 		}
 	},
 	watch: {
@@ -79,6 +80,15 @@ export default {
 					self.$set(self.post, 'comments', response.data)
 					self.$root.$nextTick(function() {
 						$('[data-toggle="tooltip"]').tooltip();
+
+						let remaining = self.post.comments.slice();
+						let comm;
+						while(comm = remaining.pop()) {
+							self.commentList.push(comm);
+							if(comm.replies.length > 0)
+								//https://jsperf.com/spread-vs-array-concat-for-array-merging
+								remaining = remaining.concat(comm.replies);
+						}
 					})
 				}).catch(function(error) {
 					console.log('Comentarios', error);
@@ -107,7 +117,7 @@ export default {
 				parent.children('.comment').show();
 
 			} else if(e.target.classList.contains('thumbs-up') || e.target.classList.contains('thumbs-down')) {
-				console.log('votar .)')
+				this.$root.voteComment(e, this.commentList)
 			}
 		},
 		

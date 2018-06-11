@@ -235,6 +235,26 @@ const vm = new Vue({
 				Vue.set(post, "score", response.data.total)
 				//post = Object.assign({},post, { score: response.data.total }); //TODO: Esto no debería funcionar
 			}).catch(error || (e=>{}));
+		},
+
+		voteComment(e, comments, callback, error) {
+			let vote = e.target.classList.contains('thumbs-up') ? 1 : -1;
+			let isNewVote = !e.target.classList.contains('voted');
+			let commentID = $(e.target).closest("[data-comment]").data('comment');
+			let sub = $(e.target).closest("[data-sub]").data('sub');
+			let comment = (comments.filter !== undefined ? comments.filter(o => o.id == commentID)[0] : comments);
+
+			this.$root.axios.request({
+				method: (isNewVote ? "POST" : "DELETE"),
+				url: "/subs/" + sub + "/posts/" + comment.postID + "/comments/" + comment.id + "/votes",
+				data: { vote }
+			}).then(callback || function(response) {
+				$(e.target).toggleClass('voted');
+				if(isNewVote)
+					$(e.target).siblings('.thumbs').removeClass('voted');
+				
+				Vue.set(comment, "score", response.data.total)
+			}).catch(error || (e=>{}));
 		}
 	},
 	created: function() {
