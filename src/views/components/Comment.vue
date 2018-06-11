@@ -22,6 +22,9 @@
 					<li class="list-inline-item"><a href="#" @click="reply" class="text-muted">Responder</a></li>
 					<li class="list-inline-item">Compartir</li>
 				</ul>
+				<div class="container" v-if="comment.replies.length > 0">
+					<single-comment v-for="reply in comment.replies" :key="reply.id" :comment="reply"></single-comment>
+				</div>
 			</div>
 		</div>
 		<ul class="list-inline small list-separated text-muted m-0 d-none collapse-title">
@@ -39,10 +42,14 @@
 </template>
 
 <script>
+import SingleComment from './Comment.vue'
 
 export default {
 	name: 'single-comment',
 	props: ['comment'],
+	components: {
+		SingleComment
+	},
 	methods: {
 		reply (e) {
 			e.preventDefault();
