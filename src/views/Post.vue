@@ -12,7 +12,7 @@
 						<div class="col-12 col-sm-11">
 							<h2>{{ post.title }}</h2>
 							<hr class="m-0 mb-1">
-							<p class="small m-0">Publicado por [link]u/{{ post.authorName }}[/link] <span data-toggle="tooltip" :title="post.creationDate | formatDate">{{ post.creationDate | formatDateShort }}</span></p>
+							<p class="small m-0">Publicado por <router-link :to="{name:'profile', params:{user:post.authorID}}" v-if="post.authorName">u/{{ post.authorName }}</router-link><i v-else>[eliminado]</i> <span data-toggle="tooltip" :title="post.creationDate | formatDate">{{ post.creationDate | formatDateShort }}</span></p>
 							<hr class="mt-1 mb-2">
 							<article v-html="parseContent(post.content)"></article>
 							[comentar]
