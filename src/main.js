@@ -13,11 +13,9 @@ import RegisterModal from './views/components/RegisterModal.vue';
 
 import urlparser from 'url-parse';
 
-import BBCodeParserPcge from 'bbcode-parser'; // Parsea HTML por defecto
+import marked from 'marked';
 import UrlifyPcge from 'urlify';
 import wysiwyg from 'vue-wysiwyg';
-
-const BBCodeParser = new BBCodeParserPcge(BBCodeParserPcge.defaultTags());
 
 
 const urlify = UrlifyPcge.create({
@@ -95,7 +93,7 @@ Vue.filter('urlify', function(s) {
 
 Vue.filter('parseContent', function(text) {
 	
-	return BBCodeParser.parseString(text);
+	return marked(text);
 });
 
 /* BUS */

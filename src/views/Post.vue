@@ -12,11 +12,9 @@
 						<div class="col-12 col-sm-11">
 							<h2>{{ post.title }}</h2>
 							<hr class="m-0 mb-1">
-							<p class="small m-0">Publicado por <router-link :to="{name:'profile', params:{user:post.authorID}}" v-if="post.authorName">u/{{ post.authorName }}</router-link><i v-else>[eliminado]</i> <span data-toggle="tooltip" :title="post.creationDate | formatDate">{{ post.creationDate | formatDateShort }}</span></p>
+							<p class="small m-0">Publicado por <router-link v-if="post.authorID" :to="{name:'profile', params:{user:post.authorID}}">u/{{ post.authorName }}</router-link><i v-else>[eliminado]</i> <span data-toggle="tooltip" :title="post.creationDate | formatDate">{{ post.creationDate | formatDateShort }}</span></p>
 							<hr class="mt-1 mb-2">
 							<article v-html="parseContent(post.content)"></article>
-							[comentar]
-							[comentarios en otra card]
 						</div>
 					</div>
 				</div>
@@ -26,12 +24,14 @@
 			<div class="new-comment form-group">
 				<h6 class="ml-1"><strong>Nuevo comentario</strong></h6>
 				<form action="#" @submit="newComment" class="text-right">
-					<textarea id="newComment_text" minlength="10" class="form-control mb-2"></textarea>
+					<input type="hidden" name="replyTo" value="0">
+					<textarea id="newComment_text" minlength="2" class="form-control mb-2" name="content"></textarea>
 					<button type="submit" class="btn btn-primary loading-ready">Comentar</button>
 				</form>
 			</div>
+			<a id="comments"></a>
 			<div class="card-body" v-if="post.comments" @click="handleCommentClick">
-				<div class="container" style="padding:1rem !important">
+				<div class="container" style="padding:1rem !important" id="comment-container">
 					<single-comment v-for="comment in post.comments" :key="comment.id" :comment="comment"></single-comment>
 				</div>
 			</div>
@@ -118,6 +118,9 @@ export default {
 
 			} else if(e.target.classList.contains('thumbs-up') || e.target.classList.contains('thumbs-down')) {
 				this.$root.voteComment(e, this.commentList)
+			} else if(e.target.classList.contains('open-reply')) {
+				e.preventDefault();
+				$(e.target).closest('.comment').children('.comment-right').children('.reply-form').removeClass('d-none');
 			}
 		},
 		
@@ -128,9 +131,29 @@ export default {
 			this.$root.votePost(e, this.post);
 		},
 
-		newComment () {
+		newComment (e) {
 			e.preventDefault();
-			console.log('TODO');
+
+			let sub = $(e.target).closest('[data-sub]').data('sub');
+			let post = $(e.target).closest('[data-post]').data('post');
+
+			let ins = {
+				content: e.target.elements['content'].value
+			}
+			if(!!+e.target.elements['replyTo'].value)
+				ins.replyTo = e.target.elements['replyTo'].value;
+			
+			this.$root.axios.post("/subs/" + sub + "/posts/" + post + "/comments", ins).then((response) => {
+				if(ins.replyTo) {
+					let comment = $('#comment-container').find('[data-comment="' + ins.replyTo + '"]').data('comment');
+					this.commentList.filter(o => o.id == comment)[0].replies.unshift(response.data);
+					this.commentList.push(response.data);
+				} else {
+					this.post.comments.unshift(response.data);
+					this.commentList.push(this.post.comments[0]);
+				}
+				
+			})
 		}
 	},
 	computed: {

@@ -7,7 +7,7 @@
 				<a class="fas fa-thumbs-down thumbs-down thumbs text-secondary" :class="{ 'voted': comment.ownVote<0 }"></a>
 				<div class="comment-line border-left"></div>
 			</div>
-			<div class="col p-0 m-0">
+			<div class="col p-0 m-0 comment-right">
 				<ul class="list-inline small list-separated text-muted m-0">
 					<li class="list-inline-item my-1">
 						<router-link v-if="comment.authorName" :to="{name: 'profile', params: { user: comment.authorName }}">{{ comment.authorName }}</router-link>
@@ -19,10 +19,15 @@
 				<div v-html="parseContent(comment.content)" v-if="comment.content"></div>
 				<div v-else><i>[Eliminado]</i></div>
 				<ul class="list-inline small list-separated text-muted m-0">
-					<li class="list-inline-item"><a href="#" @click="reply" class="text-muted">Responder</a></li>
+					<li class="list-inline-item"><a href="#" class="open-reply text-muted">Responder</a></li>
 					<li class="list-inline-item">Compartir</li>
 				</ul>
-				<div class="container" v-if="comment.replies.length > 0">
+				<form action="#" @submit="reply" class="mt-2 reply-form d-none text-right">
+					<input type="hidden" name="replyTo" :value="comment.id">
+					<textarea id="newComment_text" minlength="2" class="form-control mb-2" name="content"></textarea>
+					<button type="submit" class="btn btn-primary loading-ready">Comentar</button>
+				</form>
+				<div class="container replies-container" v-if="comment.replies.length > 0">
 					<single-comment v-for="reply in comment.replies" :key="reply.id" :comment="reply"></single-comment>
 				</div>
 			</div>
@@ -52,7 +57,7 @@ export default {
 	},
 	methods: {
 		reply (e) {
-			e.preventDefault();
+			this.$parent.newComment(e);
 		},
 		parseContent (text) {
 			return this.$root.$options.filters.parseContent(text);
